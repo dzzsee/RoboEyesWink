@@ -53,7 +53,7 @@ uint8_t MAINCOLOR = 1; // drawings
 // for middle center set "DEFAULT"
 
 
-// Constructor: takes a reference to the active Adafruit display object (e.g., Adafruit_SSD1327)
+// Constructor: takes a reference to the active Adafruit display object (e.g., Adafruit .,mn  67SSD1327)
 // Eg: roboEyes<Adafruit_SSD1327> = eyes(display);
 template<typename AdafruitDisplay>
 class RoboEyes
@@ -483,6 +483,20 @@ void open(bool left, bool right) {
 void blink(bool left, bool right) {
   close(left, right);
   open(left, right);
+}
+
+// WINK - BLINK WITH ONLY ONE EYE
+// Trigger wink animation with one eye, keeping it fluid:
+// the height transition is tweened frame by frame inside drawEyes(),
+// so the eye closes and opens again smoothly without blocking
+void wink(bool left) {
+  if(left){
+    close(true, false); // close left eye only (eyeLheightNext = 1, smoothly tweened)
+    open(true, false); // flag left eye to reopen smoothly once fully closed
+  } else {
+    close(false, true); // close right eye only (eyeRheightNext = 1, smoothly tweened)
+    open(false, true); // flag right eye to reopen smoothly once fully closed
+  }
 }
 
 

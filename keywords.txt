@@ -39,6 +39,7 @@ getScreenConstraint_Y	KEYWORD2
 close	KEYWORD2
 open	KEYWORD2
 blink	KEYWORD2
+wink	KEYWORD2
 anim_confused	KEYWORD2
 anim_laugh	KEYWORD2
 drawEyes	KEYWORD2
