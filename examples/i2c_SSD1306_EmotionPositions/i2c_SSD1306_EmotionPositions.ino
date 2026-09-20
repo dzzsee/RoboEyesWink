@@ -32,7 +32,8 @@ byte lookIndex = 0;
 // After the look steps, cycle through all remaining moods centered
 const unsigned char moods[] = {
   DEFAULT, TIRED, ANGRY, HAPPY, ALERT, BORED, DESPAIR, DISORIENTED, EXCITED,
-  FOCUSED, FURIOUS, SAD, SCARED, SLEEPY, SURPRISED, WORRIED, ANNOYED
+  FOCUSED, FURIOUS, SAD, SCARED, SLEEPY, SURPRISED, WORRIED, ANNOYED,
+  CONFUSED, CURIOUS, PROUD, RELAXED
 };
 byte moodIndex = 0;
 

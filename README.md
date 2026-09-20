@@ -1,8 +1,8 @@
 # RoboEyesWink - FluxGarage RoboEyes Library (Extended)
 
-Draws smoothly animated robot eyes on OLED displays, using the Adafruit GFX library. Robot eye shapes are configurable in terms of width, height, border radius and space between. **17 different mood expressions** (emotions), gaze directions (look up/down/left/right + diagonals) and animations (autoblinker, idle, laughing, confused, sweat drops, flickering) are available. All state changes have **smooth, fluid transitions** — the eye geometry, eyelid shapes and positions are tweened frame-by-frame, so complex emotion sequences are easily feasible.
+Draws smoothly animated robot eyes on OLED displays, using the Adafruit GFX library. Robot eye shapes are configurable in terms of width, height, border radius and space between. **21 different mood expressions** (emotions), gaze directions (look up/down/left/right + diagonals) and animations (autoblinker, idle, laughing, confused, sweat drops, flickering) are available. All state changes have **smooth, fluid transitions** — the eye geometry, eyelid shapes and positions are tweened frame-by-frame, so complex emotion sequences are easily feasible.
 
-This is an extended fork of the original **FluxGarage RoboEyes** library by Dennis Hoelscher — the API is fully backward-compatible, so all original sketches keep working. New: 13 additional moods, fluid frame-by-frame transitions, mood-specific eye geometry (rounded/wide/narrow eyes), mood-induced sweat drops and a helper for fluid one-shot animations.
+This is an extended fork of the original **FluxGarage RoboEyes** library by Dennis Hoelscher — the API is fully backward-compatible, so all original sketches keep working. New: 17 additional moods, fluid frame-by-frame transitions, mood-specific eye geometry (rounded/wide/narrow eyes), mood-induced sweat drops and a helper for fluid one-shot animations.
 
 Developing this library was the first step of a larger project: the creation of my own DIY robot from the design perspective. Check out the [FluxGarage Youtube Channel](https://www.youtube.com/@FluxGarage).
 
@@ -42,7 +42,7 @@ After installation, the example sketches can be found under
 - **setCyclops()** _(bool ON/OFF) -> if turned ON, robot has only one eye_
 
 ### Define Mood Expressions (Emotions)
-- **setMood()** _mood expression, can be one of the following 17 moods_
+- **setMood()** _mood expression, can be one of the following 21 moods_
 
 | Mood | Expression | Eye Geometry & Animation |
 |------|-----------|--------------------------|
@@ -63,6 +63,10 @@ After installation, the example sketches can be found under
 | **SURPRISED** | round, wide | maximally raised lids + very round eyes |
 | **WORRIED** | furrowed inner brows | worried eyelids + slight narrowing |
 | **ANNOYED** | half-closed asymmetric | asymmetric half-covered lids |
+| **CONFUSED** | uneven, questioning look | asymmetric eyelid positions, tilted eyes |
+| **CURIOUS** | tilted, attentive gaze | slight eye tilt + raised inner brows |
+| **PROUD** | confident, slightly narrowed | raised chin posture + narrowed lower lids |
+| **RELAXED** | soft, gentle expression | relaxed eyelids + slow relaxed blinking |
 
 All geometry targets are reached with **fluid, frame-by-frame tweening** — when switching moods the eyes morph smoothly into the new expression instead of snapping.
 
@@ -116,7 +120,7 @@ Located in the **examples/** folder and also accessible via
 - **i2c_SSD1306_SensorPlayground** _eyes reacting to sensors_
 - **i2c_SSD1306_DHT22-TemperatureSensor** _eyes showing temperature moods_
 - **spi_SSD1306_AnimationSequences** _timed animation sequences over SPI_
-- **i2c_SSD1306_AllMoodsDemo** _cycles through all 17 mood expressions with smooth transitions (NEW)_
+- **i2c_SSD1306_AllMoodsDemo** _cycles through all 21 mood expressions with smooth transitions (NEW)_
 - **i2c_SSD1306_EmotionPositions** _combines emotions with gaze directions: look up, look down, look left, look right (NEW)_
 
 

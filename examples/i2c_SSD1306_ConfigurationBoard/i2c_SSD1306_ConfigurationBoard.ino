@@ -152,7 +152,7 @@ void readButtons(){
 // MOOD TYPES
   // choose between different mood type expressions
   if (buttonMood.getSingleDebouncedPress()){
-    if (mood<16){mood++;} else{mood=0;}
+    if (mood<20){mood++;} else{mood=0;}
     switch (mood){
       case 0: roboEyes.setMood(DEFAULT); break;
       case 1: roboEyes.setMood(TIRED); break;
@@ -171,6 +171,10 @@ void readButtons(){
       case 14: roboEyes.setMood(SURPRISED); break;
       case 15: roboEyes.setMood(WORRIED); break;
       case 16: roboEyes.setMood(ANNOYED); break;
+      case 17: roboEyes.setMood(CONFUSED); break;
+      case 18: roboEyes.setMood(CURIOUS); break;
+      case 19: roboEyes.setMood(PROUD); break;
+      case 20: roboEyes.setMood(RELAXED); break;
     }
   }
 

@@ -49,6 +49,10 @@ uint8_t MAINCOLOR = 1; // drawings
 #define SURPRISED 14
 #define WORRIED 15
 #define ANNOYED 16
+#define CONFUSED 17
+#define CURIOUS 18
+#define PROUD 19
+#define RELAXED 20
 
 // For turning things on or off
 #define ON 1
@@ -103,6 +107,10 @@ bool sleepy = 0;
 bool surprised = 0;
 bool worried = 0;
 bool annoyed = 0;
+bool confusedMood = 0; // confused expression mood (not to be mixed up with the "confused" shake animation flag)
+bool curiousMood = 0; // curious expression mood (not to be mixed up with the "curious" gaze feature flag)
+bool proudMood = 0;
+bool relaxedMood = 0;
 bool curious = 0; // if true, draw the outer eye larger when looking left or right
 bool cyclops = 0; // if true, draw only one eye
 bool eyeL_open = 0; // left eye opened or closed?
@@ -207,6 +215,20 @@ byte eyelidsWorriedHeightNext = 0;
 // Annoyed (half-closed asymmetric)
 byte eyelidsAnnoyedHeight = 0;
 byte eyelidsAnnoyedHeightNext = 0;
+// Confused (asymmetric eyelid positions)
+byte eyelidsConfusedHeightL = 0;
+byte eyelidsConfusedHeightLNext = 0;
+byte eyelidsConfusedHeightR = 0;
+byte eyelidsConfusedHeightRNext = 0;
+// Curious (raised inner brows)
+byte eyelidsCuriousHeight = 0;
+byte eyelidsCuriousHeightNext = 0;
+// Proud bottom eyelids (narrowed lower lids)
+byte eyelidsProudBottomOffset = 0;
+byte eyelidsProudBottomOffsetNext = 0;
+// Relaxed top eyelids
+byte eyelidsRelaxedHeight = 0;
+byte eyelidsRelaxedHeightNext = 0;
 // Space between eyes
 int spaceBetweenDefault = 10;
 int spaceBetweenCurrent = spaceBetweenDefault;
@@ -370,55 +392,67 @@ void setMood(unsigned char mood)
     switch (mood)
     {
     case TIRED:
-      tired=1; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=1; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case ANGRY:
-      tired=0; angry=1; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=1; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case HAPPY:
-      tired=0; angry=0; happy=1; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=1; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case ALERT:
-      tired=0; angry=0; happy=0; alert=1; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=1; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case BORED:
-      tired=0; angry=0; happy=0; alert=0; bored=1; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=1; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case DESPAIR:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=1; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=1; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case DISORIENTED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=1; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=1; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case EXCITED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=1; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=1; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case FOCUSED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=1; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=1; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case FURIOUS:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=1; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=1; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case SAD:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=1; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=1; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case SCARED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=1; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=1; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case SLEEPY:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=1; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=1; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case SURPRISED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=1; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=1; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case WORRIED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=1; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=1; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     case ANNOYED:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=1;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=1; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
+      break;
+    case CONFUSED:
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=1; curiousMood=0; proudMood=0; relaxedMood=0;
+      break;
+    case CURIOUS:
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=1; proudMood=0; relaxedMood=0;
+      break;
+    case PROUD:
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=1; relaxedMood=0;
+      break;
+    case RELAXED:
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=1;
       break;
     default:
-      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0;
+      tired=0; angry=0; happy=0; alert=0; bored=0; despair=0; disoriented=0; excited=0; focused=0; furious=0; sad=0; scared=0; sleepy=0; surprised=0; worried=0; annoyed=0; confusedMood=0; curiousMood=0; proudMood=0; relaxedMood=0;
       break;
     }
     setMoodGeometry(mood);
@@ -601,7 +635,7 @@ void setMoodGeometry(unsigned char mood) {
   moodInitialized = true;
 
   // When a mood that forced an animation ends, release that animation
-  if (previousMood == EXCITED || previousMood == SLEEPY || previousMood == BORED || previousMood == SAD || previousMood == DESPAIR){ autoblinker = false; }
+  if (previousMood == EXCITED || previousMood == SLEEPY || previousMood == BORED || previousMood == SAD || previousMood == DESPAIR || previousMood == RELAXED){ autoblinker = false; }
   if (previousMood == DISORIENTED || previousMood == FURIOUS){ hFlicker = false; }
   if (previousMood == SCARED){ vFlicker = false; }
   if (previousMood == DESPAIR){ sweat = false; }
@@ -755,6 +789,38 @@ void setMoodGeometry(unsigned char mood) {
       mood_eyeRyOffset = -1;
       mood_usesHeightOffset = true;
       mood_spaceBetweenTarget = spaceBetweenDefault + 2;
+      break;
+    case CONFUSED:
+      // Uneven, questioning look: asymmetric eye sizes and tilted vertical offsets
+      mood_eyeRheightTarget = eyeRheightDefault - 4;
+      mood_eyeRwidthTarget = eyeRwidthDefault + 2;
+      mood_eyeLyOffset = -1;
+      mood_eyeRyOffset = 2;
+      mood_usesHeightOffset = true;
+      break;
+    case CURIOUS:
+      // Slight eye tilt (left eye raised) + attentive gaze, inner brows are drawn as raised eyelids
+      mood_eyeLheightTarget = eyeLheightDefault + 2;
+      mood_eyeLyOffset = -3;
+      mood_eyeRyOffset = 1;
+      mood_usesHeightOffset = true;
+      break;
+    case PROUD:
+      // Raised chin posture (eyes positioned higher) + slightly narrowed eyes
+      mood_eyeLheightTarget = eyeLheightDefault - 4;
+      mood_eyeRheightTarget = eyeRheightDefault - 4;
+      mood_eyeLyOffset = -5;
+      mood_eyeRyOffset = -5;
+      mood_usesHeightOffset = true;
+      break;
+    case RELAXED:
+      // Soft, gentle: full eye size, relaxed top lids drawn in drawEyes(), slow relaxed blinking
+      mood_eyeLyOffset = 1;
+      mood_eyeRyOffset = 1;
+      mood_usesHeightOffset = true;
+      mood_autoblinker = true;
+      mood_blinkInterval = 6;
+      mood_blinkVariation = 3;
       break;
     default:
       break;
@@ -1020,6 +1086,11 @@ void drawEyes(){
   eyelidsSurprisedHeightNext    = surprised    ? eyeLheightCurrent/4 : 0;
   eyelidsWorriedHeightNext      = worried      ? eyeLheightCurrent/2 : 0;
   eyelidsAnnoyedHeightNext      = annoyed      ? eyeLheightCurrent/2 : 0;
+  eyelidsConfusedHeightLNext    = confusedMood ? eyeLheightCurrent/3 : 0;
+  eyelidsConfusedHeightRNext    = confusedMood ? eyeLheightCurrent/5 : 0;
+  eyelidsCuriousHeightNext      = curiousMood  ? eyeLheightCurrent/3 : 0;
+  eyelidsProudBottomOffsetNext  = proudMood    ? eyeLheightCurrent/3 : 0;
+  eyelidsRelaxedHeightNext      = relaxedMood  ? eyeLheightCurrent/3 : 0;
 
   // Draw tired top eyelids
     eyelidsTiredHeight = (eyelidsTiredHeight + eyelidsTiredHeightNext)/2;
@@ -1175,6 +1246,44 @@ void drawEyes(){
     } else {
       display->fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx, eyeLy+eyelidsAnnoyedHeight-1, BGCOLOR);
       display->fillTriangle(eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsAnnoyedHeight/2-1, BGCOLOR);
+    }
+
+  // Draw CONFUSED eyelids (asymmetric eyelid positions)
+    eyelidsConfusedHeightL = (eyelidsConfusedHeightL + eyelidsConfusedHeightLNext)/2;
+    eyelidsConfusedHeightR = (eyelidsConfusedHeightR + eyelidsConfusedHeightRNext)/2;
+    if (!cyclops){
+      display->fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+eyelidsConfusedHeightL-1, BGCOLOR); // left heavier
+      display->fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsConfusedHeightR-1, BGCOLOR); // right lighter
+    } else {
+      display->fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx, eyeLy+eyelidsConfusedHeightL-1, BGCOLOR);
+      display->fillTriangle(eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsConfusedHeightR-1, BGCOLOR);
+    }
+
+  // Draw CURIOUS eyelids (raised inner brows)
+    eyelidsCuriousHeight = (eyelidsCuriousHeight + eyelidsCuriousHeightNext)/2;
+    if (!cyclops){
+      display->fillTriangle(eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-eyelidsCuriousHeight-1, BGCOLOR); // left inner brow raised
+      display->fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent/2, eyeRy-1, eyeRx, eyeRy-eyelidsCuriousHeight-1, BGCOLOR); // right inner brow raised
+    } else {
+      display->fillTriangle(eyeLx+eyeLwidthCurrent/4, eyeLy-1, eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx+eyeLwidthCurrent/2, eyeLy-eyelidsCuriousHeight-1, BGCOLOR);
+      display->fillTriangle(eyeLx+eyeLwidthCurrent/2, eyeLy-1, eyeLx+3*eyeLwidthCurrent/4, eyeLy-1, eyeLx+eyeLwidthCurrent/2, eyeLy-eyelidsCuriousHeight-1, BGCOLOR);
+    }
+
+  // Draw PROUD bottom eyelids (narrowed lower lids)
+    eyelidsProudBottomOffset = (eyelidsProudBottomOffset + eyelidsProudBottomOffsetNext)/2;
+    display->fillRoundRect(eyeLx-1, (eyeLy+eyeLheightCurrent)-eyelidsProudBottomOffset+1, eyeLwidthCurrent+2, eyeLheightDefault, eyeLborderRadiusCurrent, BGCOLOR); // left eye
+    if (!cyclops){
+      display->fillRoundRect(eyeRx-1, (eyeRy+eyeRheightCurrent)-eyelidsProudBottomOffset+1, eyeRwidthCurrent+2, eyeRheightDefault, eyeRborderRadiusCurrent, BGCOLOR); // right eye
+    }
+
+  // Draw RELAXED eyelids (soft relaxed top lids)
+    eyelidsRelaxedHeight = (eyelidsRelaxedHeight + eyelidsRelaxedHeightNext)/2;
+    if (!cyclops){
+      display->fillTriangle(eyeLx, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx, eyeLy+eyelidsRelaxedHeight-1, BGCOLOR); // left eye
+      display->fillTriangle(eyeRx, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy-1, eyeRx+eyeRwidthCurrent, eyeRy+eyelidsRelaxedHeight-1, BGCOLOR); // right eye
+    } else {
+      display->fillTriangle(eyeLx, eyeLy-1, eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx, eyeLy+eyelidsRelaxedHeight-1, BGCOLOR); // left eyelid half
+      display->fillTriangle(eyeLx+(eyeLwidthCurrent/2), eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy-1, eyeLx+eyeLwidthCurrent, eyeLy+eyelidsRelaxedHeight-1, BGCOLOR); // right eyelid half
     }
 
   // Add sweat drops

@@ -10,7 +10,8 @@
 //
 //  All moods:
 //  DEFAULT, TIRED, ANGRY, HAPPY, ALERT, BORED, DESPAIR, DISORIENTED, EXCITED, FOCUSED,
-//  FURIOUS, SAD, SCARED, SLEEPY, SURPRISED, WORRIED, ANNOYED
+//  FURIOUS, SAD, SCARED, SLEEPY, SURPRISED, WORRIED, ANNOYED, CONFUSED, CURIOUS, PROUD,
+//  RELAXED
 //
 //***********************************************************************************************
 
@@ -30,7 +31,8 @@ RoboEyes<Adafruit_SSD1306> roboEyes(display);
 // List of all moods to cycle through
 const unsigned char moods[] = {
   DEFAULT, TIRED, ANGRY, HAPPY, ALERT, BORED, DESPAIR, DISORIENTED, EXCITED,
-  FOCUSED, FURIOUS, SAD, SCARED, SLEEPY, SURPRISED, WORRIED, ANNOYED
+  FOCUSED, FURIOUS, SAD, SCARED, SLEEPY, SURPRISED, WORRIED, ANNOYED,
+  CONFUSED, CURIOUS, PROUD, RELAXED
 };
 
 byte moodIndex = 0;           // current mood index
